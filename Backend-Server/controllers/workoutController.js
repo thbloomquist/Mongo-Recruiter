@@ -31,6 +31,22 @@ const getWorkout = async(req, res) => {
 // create new workout
 const createNewWorkout = async(req, res) => {
     const {title, reps, load} = req.body
+
+    let emptyFields = []
+
+    if(!title) {
+        emptyFields.push('title')
+    }
+    if(!load) {
+        emptyFields.push('load')
+    }
+    if(!reps) {
+        emptyFields.push('reps')
+    }
+    if(emptyFields.length > 0) {
+        return res.status(400).json({error: 'Please fill in all the fields', emptyFields})
+    }
+
     try {
         const newWorkout = await Workout.create({title, reps, load})
         //create() is an async function
@@ -39,7 +55,7 @@ const createNewWorkout = async(req, res) => {
         //if success status=200 (which is good)
         //and respond with newly created workout object
     } catch(error) {
-        res.status(400).json({error: error.msg})
+        res.status(400).json({error: error.message})
     }
 }
 

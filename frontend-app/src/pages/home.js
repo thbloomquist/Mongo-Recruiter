@@ -1,12 +1,12 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
+import { useWorkoutsContext } from '../hooks/useWorkoutsContext'
 
 //components
 import WorkoutDetails from '../components/workoutDetails'
+import WorkoutForm from '../components/WorkoutForm'
 
 const Home = () => {
-    const [workouts, setWorkouts] = useState(null)
-    //this creates states
-    //that can be updated with dynamic data
+    const {workouts, dispatch} = useWorkoutsContext()
 
     useEffect(() => {
         //useEffect fires a function
@@ -19,17 +19,18 @@ const Home = () => {
             //^ this parses the JSON and converts it into an array of JSON objects
 
             if(response.ok) {
-                setWorkouts(json)
+                dispatch({type: 'SET_WORKOUTS', payload: json})
+                //this uses workoutsReducer defined in WorkoutContext
+                //to set our the data seen by the user
+                //to be the data fetched from our database via API
             }
         }
 
         fetchWorkouts()
-    }, [])
-    //to prevent useEffect from firing multiple times
-    //we pass in an empty array [] as a parameter
-    //this array is the dependency array
-    //so now useEffect will ony fire once
-    //and that is when it first renders
+    }, [dispatch])
+    //whenever dispatch is fired
+    //useEffect is re run
+    //this is called a dependency array
     return(
         <div className = "home">
             <div className = "workouts">
@@ -47,6 +48,7 @@ const Home = () => {
                     //READ ME!
                 ))}
             </div>
+            <WorkoutForm />
         </div>
     )
 }

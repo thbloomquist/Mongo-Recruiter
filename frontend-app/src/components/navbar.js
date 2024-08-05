@@ -12,5 +12,6 @@ const Navbar = () => {
         </header>
     )
 }
-
+// TODO: Implement Searchbar
+// TODO: Implement Mass Creation (need example LinkedIn .csv file to see formatting)
 export default Navbar
